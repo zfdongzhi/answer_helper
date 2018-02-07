@@ -8,9 +8,11 @@ from PIL import ImageGrab
 from aip import AipOcr
 import datetime
 # import colorsys
-APP_ID = '10714141'
-API_KEY = 'u6NYbZValbFRjLkngQDqgHIp'
-SECRET_KEY = 'oXzvN8hivVpvr6P343qSLvA7KxdfazSx'
+
+# baidu ocr key
+APP_ID = ''
+API_KEY = ''
+SECRET_KEY = ''
 client = AipOcr(APP_ID, API_KEY, SECRET_KEY)
 
 

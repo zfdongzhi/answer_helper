@@ -7,7 +7,7 @@
 3、测试结果准确率大概只有70%~80%，可以做为参考，也可以用来调用浏览器搜索
 
 ## 程序用法
-0、程序依赖在requirements.txt
+0、程序依赖在requirements.txt，百度OCR：http://ai.baidu.com/tech/ocr，在ocr.py中填入接口Key
 
 1、使用前请安装一个手机模拟器，将答题直播显示到电脑上
 
