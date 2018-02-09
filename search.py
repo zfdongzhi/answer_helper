@@ -62,7 +62,7 @@ def baidu_search(question, options, browser_flag, more_search):
                     mark_unit /= 2
             except Exception as e:
                 print("Unexpected Error: {}".format(e))
-    mark_max = 0
+    mark_max = -1
     mark_min = 2000000
     for i, mark in enumerate(mark_raw):
         if mark > mark_max:
