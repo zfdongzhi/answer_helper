@@ -11,8 +11,9 @@ from PyQt5.QtGui import QIcon
 import sys
 import Size
 import Demo
-from ocr import im_cap, baidu_ocr
+from ocr import baidu_ocr
 from search import baidu_search
+from im_cap import im_cap_adb, im_cap_pc
 
 
 def show_size_window():
@@ -29,27 +30,31 @@ def find_answer():
     global cb_more_search, cb_debug, cb_browser, app_box, ans_box
     more_search = cb_more_search.checkState()
     debug = cb_debug.checkState()
-    browser_flag = cb_browser.checkState()
+    phone_flag = cb_phone.checkState()
     if app_box.currentIndex() == 0:
         app_name = 'Toutiao'
-    elif app_box.currentIndex == 1:
+    elif app_box.currentIndex() == 1:
         app_name = 'Chongding'
-    elif app_box.currentIndex == 2:
+    elif app_box.currentIndex() == 2:
         app_name = 'Zhishi'
-    elif app_box.currentIndex == 3:
+    elif app_box.currentIndex() == 3:
         app_name = 'Taobao'
     else:
         app_name = 'default'
-    im_cap(app_name)
-    head = 2
-    if app_name == 'Zhishi':
+    if phone_flag:
+        im_cap_adb(app_name)
+    else:
+        im_cap_pc(app_name)
+    question, options = baidu_ocr(debug)
+    if app_name != 'Zhishi' and app_name != 'default':
         head = 0
-    elif app_name == 'Chongding':
-        head = 1
-    question, options = baidu_ocr(head, debug)
-    # print(question, options)
+        tail = len(question)
+        while question[head] > '0' < '9' and head < tail:
+            head = head + 1
+        if question[head] == '.':
+            head = head + 1
+        question = question[head:]
     answer = baidu_search(question, options, browser_flag, more_search)
-    # print(answer)
     ans_box.setPlainText(answer)
 
 
@@ -75,6 +80,7 @@ if __name__ == '__main__':
     cb_more_search = ui_demo.checkBox
     cb_debug = ui_demo.checkBox_2
     cb_browser = ui_demo.checkBox_3
+    cb_phone = ui_demo.checkBox_4
     app_box = ui_demo.comboBox
     ans_box = ui_demo.textEdit
     size_window = QDialog()

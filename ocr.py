@@ -2,64 +2,23 @@
 # -*- coding: utf-8 -*-
 # author:Zhai-Fan
 # mail: zfneutrino@gmail.com
-
-# from PIL import Image
-from PIL import ImageGrab
 from aip import AipOcr
 import datetime
-# import colorsys
+
 
 # baidu ocr key
-APP_ID = ''
-API_KEY = ''
-SECRET_KEY = ''
+APP_ID = '10714141'
+API_KEY = 'u6NYbZValbFRjLkngQDqgHIp'
+SECRET_KEY = 'oXzvN8hivVpvr6P343qSLvA7KxdfazSx'
 client = AipOcr(APP_ID, API_KEY, SECRET_KEY)
 
 
-def get_file_content(filePath):
-    with open(filePath, 'rb') as fp:
+def get_file_content(file_path):
+    with open(file_path, 'rb') as fp:
         return fp.read()
 
 
-# def new_question(image):
-#     image = image.convert('RGBA')
-#     max_score = 0
-#     dominant_color = None
-#     for score, (r, g, b, a) in image.getcolors(image.size[0] * image.size[1]):
-#         if a == 0:
-#             continue
-#         saturation = colorsys.rgb_to_hsv(r / 255.0, g / 255.0, b / 255.0)[1]
-#         y = min(abs(r * 2104 + g * 4130 + b * 802 + 4096 + 131072) >> 13, 235)
-#         y = (y - 16.0) / (235 - 16)
-#         if score > max_score:
-#             max_score = score
-#             dominant_color = (r, g, b)
-#         if dominant_color[0] + dominant_color[1] + dominant_color[2] > 760:
-#             return 1
-#         else:
-#             return 0
-
-
-def im_cap(programme):
-    if programme == 'QQ':
-        location = (18, 120, 335, 440)  # to do
-    elif programme == '163':
-        location = (18, 120, 335, 440)  # to do
-    elif programme == 'Toutiao':
-        location = (18, 130, 370, 480)
-    elif programme == 'Taobao':
-        location = (18, 150, 360, 480)
-    elif programme == 'Chongding':
-        location = (18, 130, 368, 443)
-    elif programme == 'Zhishi':
-        location = (18, 138, 370, 450)
-    else:
-        location = (18, 120, 335, 440)
-    im = ImageGrab.grab(location)
-    im.save('0.png')
-
-
-def baidu_ocr(head, debug):
+def baidu_ocr(debug):
     question = ''
     answer_options = []
     option = {}
@@ -77,18 +36,12 @@ def baidu_ocr(head, debug):
             break
         last_line = bottom
         question += words_result[i]['words']
-    question = question[head:-1]
-    # question = question.encode('utf')
-    # if words_result[i]['min_finegrained_vertexes_location'][0]['y'] - words_result[i+1]['min_finegrained_vertexes_location'][0]['y'] < 5\
-    #         and words_result[i+1]['min_finegrained_vertexes_location'][0]['y'] - words_result[i]['min_finegrained_vertexes_location'][0]['y'] < 5:
-    #     diff = 2
-    # else:
-    #     diff = 1
     for j in range(i, line_num):
-        bottom = words_result[j]['min_finegrained_vertexes_location'][2]['y']
-        if bottom - last_line > 5 or last_line - bottom > 5:
+        if words_result[j]['words'][0] != 'A' and words_result[j]['words'][0] != 'B' and \
+           words_result[j]['words'][0] != 'C' and words_result[j]['words'][0] != 'D':
             answer_options.append(words_result[j]['words'])
-        last_line = bottom
+    if len(answer_options) < 2:
+        answer_options = answer_options[0]
     if debug:
         time = datetime.datetime.now().strftime("%m/%d %H:%M:%S")
         f = open('questions.txt', 'a')
@@ -99,7 +52,6 @@ def baidu_ocr(head, debug):
     return question, answer_options
 
 
-# im_cap('Taobao')
-# question, options = baidu_ocr(2, 0)
+# question, options = baidu_ocr(0, 0)
 # print(question,options)
 # print(new_question(Image.open('5.png')))
